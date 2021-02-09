@@ -189,15 +189,15 @@ def ConvertToOSIS(sFile, relaxed_conformance=False, encoding='', debug=False,
 
         # \is#_text...
         osis = re.sub(r'\\is1?\s+(.+)', lambda m: '\uFDE2<div type="section" subType="x-introduction"><title>' + m.group(1) + '</title>', osis)
-        osis = re.sub('(\uFDE2<div type="section" subType="x-introduction">[^\uFDE2]+)(?!\\c\b)', r'\1' + '</div>\uFDE2\n', osis, flags=re.DOTALL)
+        osis = re.sub('(\uFDE2<div type="section" subType="x-introduction">[^\uFDE2]+)'+r'(?!\\c\b)', r'\1'+'</div>\uFDE2\n', osis, flags=re.DOTALL)
         osis = re.sub(r'\\is2\s+(.+)', lambda m: '\uFDE3<div type="subSection" subType="x-introduction"><title>' + m.group(1) + '</title>', osis)
-        osis = re.sub('(\uFDE3<div type="subSection" subType="x-introduction">[^\uFDE2\uFDE3]+)(?!\\c\b)', r'\1' + '</div>\uFDE3\n', osis, flags=re.DOTALL)
+        osis = re.sub('(\uFDE3<div type="subSection" subType="x-introduction">[^\uFDE2\uFDE3]+)'+r'(?!\\c\b)', r'\1'+'</div>\uFDE3\n', osis, flags=re.DOTALL)
         osis = re.sub(r'\\is3\s+(.+)', lambda m: '\uFDE4<div type="x-subSubSection" subType="x-introduction"><title>' + m.group(1) + '</title>', osis)
-        osis = re.sub('(\uFDE4<div type="subSubSection" subType="x-introduction">[^\uFDE2\uFDE3\uFDE4]+)(?!\\c\b)', r'\1' + '</div>\uFDE4\n', osis, flags=re.DOTALL)
+        osis = re.sub('(\uFDE4<div type="subSubSection" subType="x-introduction">[^\uFDE2\uFDE3\uFDE4]+)'+r'(?!\\c\b)', r'\1'+'</div>\uFDE4\n', osis, flags=re.DOTALL)
         osis = re.sub(r'\\is4\s+(.+)', lambda m: '\uFDE5<div type="x-subSubSubSection" subType="x-introduction"><title>' + m.group(1) + '</title>', osis)
-        osis = re.sub('(\uFDE5<div type="subSubSubSection" subType="x-introduction">[^\uFDE2\uFDE3\uFDE4\uFDE5]+)(?!\\c\b)', r'\1' + '</div>\uFDE5\n', osis, flags=re.DOTALL)
+        osis = re.sub('(\uFDE5<div type="subSubSubSection" subType="x-introduction">[^\uFDE2\uFDE3\uFDE4\uFDE5]+)'+r'(?!\\c\b)', r'\1'+'</div>\uFDE5\n', osis, flags=re.DOTALL)
         osis = re.sub(r'\\is5\s+(.+)', lambda m: '\uFDE6<div type="x-subSubSubSubSection" subType="x-introduction"><title>' + m.group(1) + '</title>', osis)
-        osis = re.sub('(\uFDE6<div type="subSubSubSubSection" subType="x-introduction">[^\uFDE2\uFDE3\uFDE4\uFDE5\uFDE6]+?)(?!\\c\b)', r'\1' + '</div>\uFDE6\n', osis, flags=re.DOTALL)
+        osis = re.sub('(\uFDE6<div type="subSubSubSubSection" subType="x-introduction">[^\uFDE2\uFDE3\uFDE4\uFDE5\uFDE6]+?)'+r'(?!\\c\b)', r'\1'+'</div>\uFDE6\n', osis, flags=re.DOTALL)
 
         # \ip_text...
         osis = re.sub(r'\\ip\s+(.*?)(?=(\\(i?m|i?p|lit|cls|tr|io|iq|i?li|iex?|s|c)\b|<(/?div|p|closer)\b))', lambda m: '\uFDD3<p subType="x-introduction">\n' + m.group(1) + '\uFDD3</p>\n', osis, flags=re.DOTALL)
@@ -231,7 +231,7 @@ def ConvertToOSIS(sFile, relaxed_conformance=False, encoding='', debug=False,
 
         # \ili#_text...
         osis = re.sub(r'\\ili\b\s*(.*?)(?=([' + '\uFDD0\uFDD1\uFDD3\uFDD4' + r']|\\(ili\d?|c|p|io[t\d]?|iex?)\b|<(lb|title|item|\?div)\b))', '<item type="x-indent-1" subType="x-introduction">\uFDE0' + r'\1' + '\uFDE0</item>', osis, flags=re.DOTALL)
-        osis = re.sub(r'\\ili(\d)\b\s*(.*?)(?=([' + '\uFDD0\uFDD1\uFDD3\uFDD4' + r']|\\(ili\d?|c|p|io[t\d]?|iex?)\b|<(lb|title|item|\?div)\b))', r'<item type="x-indent-\1" subType="x-introduction">\uFDE0' + r'\2' + '\uFDE0</item>', osis, flags=re.DOTALL)
+        osis = re.sub(r'\\ili(\d)\b\s*(.*?)(?=([' + '\uFDD0\uFDD1\uFDD3\uFDD4' + r']|\\(ili\d?|c|p|io[t\d]?|iex?)\b|<(lb|title|item|\?div)\b))', r'<item type="x-indent-\1" subType="x-introduction">'+'\uFDE0' + r'\2' + '\uFDE0</item>', osis, flags=re.DOTALL)
         osis = osis.replace('\n</item>', '</item>\n')
         osis = re.sub('(<item [^\uFDD0\uFDD1\uFDD3\uFDD4]+</item>)',
                       '\uFDD3<list>' + r'\1' + '</list>\uFDD3',
@@ -240,7 +240,7 @@ def ConvertToOSIS(sFile, relaxed_conformance=False, encoding='', debug=False,
         # \iot_text...
         # \io#_text...(references range)
         osis = re.sub(r'\\io\b\s*(.*?)(?=([' + '\uFDD0\uFDD1\uFDD3\uFDD4' + r']|\\(io[t\d]?|iex?|c|p)\b|<(lb|title|item|\?div)\b))', '<item type="x-indent-1" subType="x-introduction">\uFDE1' + r'\1' + '\uFDE1</item>', osis, flags=re.DOTALL)
-        osis = re.sub(r'\\io(\d)\b\s*(.*?)(?=([' + '\uFDD0\uFDD1\uFDD3\uFDD4' + r']|\\(io[t\d]?|iex?|c|p)\b|<(lb|title|item|\?div)\b))', r'<item type="x-indent-\1" subType="x-introduction">\uFDE1' + r'\2' + '\uFDE1</item>', osis, flags=re.DOTALL)
+        osis = re.sub(r'\\io(\d)\b\s*(.*?)(?=([' + '\uFDD0\uFDD1\uFDD3\uFDD4' + r']|\\(io[t\d]?|iex?|c|p)\b|<(lb|title|item|\?div)\b))', r'<item type="x-indent-\1" subType="x-introduction">'+'\uFDE1' + r'\2' + '\uFDE1</item>', osis, flags=re.DOTALL)
         osis = re.sub(r'\\iot\b\s*(.*?)(?=([' + '\uFDD0\uFDD1\uFDD3\uFDD4' +
                       r']|\\(io[t\d]?|iex?|c|p)\b|<(lb|title|item|\?div)\b))',
                       '<item type="head">\uFDE1' + r'\1' +
@@ -257,7 +257,7 @@ def ConvertToOSIS(sFile, relaxed_conformance=False, encoding='', debug=False,
 
         # \iex  # TODO: look for example; I have no idea what this would look like in context
         osis = re.sub(r'\\iex\b\s*(.+?)' +
-                      '?=(\s*(\\c|</div type="book">\uFDD0))',
+                      r'?=(\s*(\\c|</div type="book">'+'\uFDD0))',
                       r'<div type="bridge">\1</div>', osis, flags=re.DOTALL)
 
         # \iqt_text...\iqt*
@@ -1115,7 +1115,7 @@ def ConvertToOSIS(sFile, relaxed_conformance=False, encoding='', debug=False,
         # these can all be handled by the default \z Namespace handlers:
 
         # \z{X}...\z{X}*
-        osis = re.sub(r'\z([^\s]+)\s(.+?)(\z\1\*)',
+        osis = re.sub(r'\\z([^\s]+)\s(.+?)(\\z\1\*)',
                       r'<seg type="x-\1">\2</seg>',
                       osis, flags=re.DOTALL)
 
